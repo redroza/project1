@@ -285,9 +285,86 @@ python main.py
 ...
 ```
 
-## Использование:
+## Примеры использования
 
-Откройте приложение в вашем веб-браузере.
+### Пример 1: Базовое маскирование
+
+```python
+from src.masks import get_mask_card_number, get_mask_account
+
+# Маскирование карты
+card = "4532015112830366"
+print(get_mask_card_number(card))  # 4532 01** **** 0366
+
+# Маскирование счета
+account = "12345678901234567890"
+print(get_mask_account(account))  # **7890
+```
+
+### Пример 2: Работа с виджетом
+
+```python
+from src.widget import mask_account_card, get_date
+
+# Универсальное маскирование
+print(mask_account_card("MasterCard 5425233430109903"))
+# MasterCard 5425 23** **** 9903
+
+# Форматирование даты
+print(get_date("2024-12-25T15:30:00.000000"))
+# 25.12.2024
+```
+
+### Пример 3: Обработка операций
+
+```python
+from src.processing import filter_by_state, sort_by_date
+
+operations = [
+    {'id': 1, 'state': 'EXECUTED', 'date': '2024-01-15T10:00:00'},
+    {'id': 2, 'state': 'CANCELED', 'date': '2024-01-10T09:00:00'},
+    {'id': 3, 'state': 'EXECUTED', 'date': '2024-01-20T14:00:00'}
+]
+
+# Получить последние 5 выполненных операций
+result = sort_by_date(
+    filter_by_state(operations, 'EXECUTED'),
+    reverse=True
+)[:5]
+
+print(f"Найдено операций: {len(result)}")
+for op in result:
+    print(f"  ID: {op['id']}, Дата: {op['date'][:10]}")
+```
+
+### Пример 4: Полный цикл обработки
+
+```python
+from src.widget import mask_account_card, get_date
+from src.processing import filter_by_state, sort_by_date
+
+def display_recent_operations(operations, n=5):
+    """Показать последние N выполненных операций."""
+    # Фильтруем выполненные
+    executed = filter_by_state(operations, 'EXECUTED')
+
+    # Сортируем от новых к старым
+    sorted_ops = sort_by_date(executed, reverse=True)
+
+    # Берем первые N
+    recent = sorted_ops[:n]
+
+    # Выводим с форматированием
+    print(f"\nПоследние {len(recent)} операций:")
+    for i, op in enumerate(recent, 1):
+        date = get_date(op['date'])
+        card = mask_account_card(op.get('description', 'N/A'))
+        print(f"{i}. {date} - {card}")
+
+# Использование
+all_operations = [...]  # ваши данные
+display_recent_operations(all_operations, n=10)
+```
 
 ## Документация:
 
