@@ -1,5 +1,6 @@
 import pytest
-from src.widget import mask_account_card, get_date
+
+from src.widget import get_date, mask_account_card
 
 
 class TestMaskAccountCard:
@@ -12,11 +13,11 @@ class TestMaskAccountCard:
         ("Visa Platinum 4111111111111111", "Visa Platinum 4111 11** **** 1111"),
         ("Maestro 1234567890123456", "Maestro 1234 56** **** 3456"),
     ])
-    def test_valid_input(self, input_data, expected):
+    def test_valid_input(self, input_data: str, expected: str) -> None:
         """Тестирование правильности маскировки для различных типов карт и счетов"""
         assert mask_account_card(input_data) == expected
 
-    def test_input_with_extra_spaces(self):
+    def test_input_with_extra_spaces(self) -> None:
         """Тестирование входных данных с лишними пробелами"""
         assert mask_account_card("  Visa   1234567890123456  ") == "  Visa   1234567890123456  "
         assert mask_account_card("Счет   73654108430135874305  ") == "Счет   73654108430135874305  "
@@ -28,18 +29,18 @@ class TestMaskAccountCard:
         ("Visa 1234", "Visa 1234"),
         ("Счет 1234567890", "Счет 1234567890"),  # Слишком короткий для счета
     ])
-    def test_invalid_input(self, input_data, expected):
+    def test_invalid_input(self, input_data: str, expected: str) -> None:
         """Тестирование обработки некорректных входных данных"""
         assert mask_account_card(input_data) == expected
 
-    def test_mixed_card_and_account(self):
+    def test_mixed_card_and_account(self) -> None:
         """Тестирование с данными, похожими и на карту, и на счет"""
         # Номер длиной 16 символов, но это может быть счет
         assert mask_account_card("Счет 1234567890123456") == "Счет 1234 56** **** 3456"
         # Номер длиной 20 символов, но это может быть карта
         assert mask_account_card("Visa 12345678901234567890") == "Visa **7890"
 
-    def test_none_input(self):
+    def test_none_input(self) -> None:
         """Тестирование обработки None"""
         with pytest.raises(AttributeError):
             mask_account_card(None)
@@ -58,7 +59,7 @@ class TestGetDate:
         """Тестирование правильности преобразования даты"""
         assert get_date(input_date) == expected
 
-    def test_date_without_time(self):
+    def test_date_without_time(self) -> None:
         """Тестирование даты без временной части (ожидаем ошибку)"""
         with pytest.raises(ValueError):
             get_date("2024-03-11")
@@ -84,4 +85,3 @@ class TestGetDate:
         """Тестирование обработки некорректных форматов дат"""
         with pytest.raises(ValueError):
             get_date(invalid_date)
-

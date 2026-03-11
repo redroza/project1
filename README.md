@@ -365,6 +365,30 @@ def display_recent_operations(operations, n=5):
 all_operations = [...]  # ваши данные
 display_recent_operations(all_operations, n=10)
 ```
+# Тесты для проекта
+
+## Структура тестов
+
+- `conftest.py` - фикстуры с тестовыми данными
+- `test_masks.py` - тесты для модуля masks
+- `test_widget.py` - тесты для модуля widget
+- `test_processing.py` - тесты для модуля processing
+
+## Запуск тестов
+
+```bash
+# Запуск всех тестов
+pytest
+
+# Запуск с подробным выводом
+pytest -v
+
+# Запуск конкретного файла
+pytest tests/test_masks.py
+
+# Запуск с отчетом о покрытии
+pytest --cov=src tests/
+```
 
 ## Документация:
 
@@ -373,3 +397,4 @@ display_recent_operations(all_operations, n=10)
 ## Лицензия:
 
 Этот проект лицензирован по [лицензии MIT](LICENSE).
+

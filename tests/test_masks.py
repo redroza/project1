@@ -1,5 +1,6 @@
 import pytest
-from src.masks import get_mask_card_number, get_mask_account
+
+from src.masks import get_mask_account, get_mask_card_number
 
 
 class TestGetMaskCardNumber:
@@ -19,7 +20,7 @@ class TestGetMaskCardNumber:
         result = get_mask_card_number(sample_card_numbers['valid_with_spaces'])
         assert result == "1234 56** **** 3456"
 
-    def test_card_number_boundary_values(self):
+    def test_card_number_boundary_values(self) -> None:
         """Тестирование граничных случаев"""
         # Минимальный допустимый номер
         with pytest.raises(ValueError, match="Номер карты должен содержать 16 цифр"):
@@ -41,7 +42,7 @@ class TestGetMaskCardNumber:
         with pytest.raises(ValueError):
             get_mask_card_number(invalid_input)
 
-    def test_card_number_none_input(self):
+    def test_card_number_none_input(self) -> None:
         """Проверка обработки None (если функция ожидает строку)"""
         with pytest.raises(AttributeError):
             get_mask_card_number(None)
@@ -64,7 +65,7 @@ class TestGetMaskAccount:
         result = get_mask_account(sample_account_numbers['valid_with_spaces'])
         assert result == "**7890"
 
-    def test_account_number_boundary_values(self):
+    def test_account_number_boundary_values(self) -> None:
         """Тестирование граничных случаев"""
         # Минимальный допустимый номер
         with pytest.raises(ValueError, match="Номер счета должен содержать минимум 20 цифр"):
@@ -86,7 +87,7 @@ class TestGetMaskAccount:
         with pytest.raises(ValueError):
             get_mask_account(invalid_input)
 
-    def test_account_number_none_input(self):
+    def test_account_number_none_input(self) -> None:
         """Проверка обработки None"""
         with pytest.raises(AttributeError):
             get_mask_account(None)
